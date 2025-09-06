@@ -1,7 +1,7 @@
 // server.js index file
 const dotenv = require("dotenv");
 dotenv.config();
-const connectDB = require("./config/database");
+const { connectDB } = require("./config/database");
 const corsConfig = require("./config/cors");
 const express = require("express");
 const app = express();
