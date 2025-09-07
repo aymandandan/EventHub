@@ -32,9 +32,28 @@ userSchema.methods.verifyPassword = async function (password) {
 	return bcrypt.compare(password, this.passwordHash);
 };
 
+userSchema.methods.verifyRefreshToken = async function (refreshToken) {
+	return bcrypt.compare(refreshToken, this.refreshTokenHash);
+};
+
 userSchema.statics.hashPassword = async function (password) {
 	const saltRounds = 12;
 	return bcrypt.hash(password, saltRounds);
 };
+
+userSchema.pre("save", async function (next) {
+	if (this.isModified("passwordHash")) {
+		this.passwordHash = await this.constructor.hashPassword(this.password);
+	}
+	next();
+});
+
+userSchema.pre("remove", async function (next) {
+	await this.model("Event").deleteMany({ user: this._id });
+	await this.model("RSVP").deleteMany({ user: this._id });
+	await this.model("Comment").deleteMany({ user: this._id });
+	await this.model("Notification").deleteMany({ user: this._id });
+	next();
+});
 
 module.exports = mongoose.model("User", userSchema);
