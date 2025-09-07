@@ -4,10 +4,7 @@ const logger = require("../utils/logger");
 // mongodb connection config
 const dbConfig = {
 	uri: process.env.MONGODB_URI || "mongodb://localhost:27017/eventhub",
-	options: {
-		useNewUrlParser: true,
-		useUnifiedTopology: true,
-	},
+	options: null,
 };
 
 // database connection function
