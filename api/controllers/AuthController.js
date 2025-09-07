@@ -29,7 +29,7 @@ const registerController = async (req, res) => {
 		}
 
         // check if user already exists
-		const existingUser = await User.findOne({ email });
+		const existingUser = await User.findOne({ email }).select("+passwordHash");
 		if (existingUser) {
 			return ApiResponse.badRequest(res, "User already exists");
 		}
@@ -37,7 +37,6 @@ const registerController = async (req, res) => {
 		const user = await User.create({ name, email, passwordHash: password });
         
         user.passwordHash = undefined;
-        user.refreshTokenHash = undefined;
         
 		ApiResponse.success(res, user);
 	} catch (error) {
@@ -60,7 +59,7 @@ const loginController = async (req, res) => {
 		}
 
 		// fetch user
-		const user = await User.findOne({ email });
+		const user = await User.findOne({ email }).select("+passwordHash +refreshTokenHash");
 
 		// check if user exists
 		if (!user) {

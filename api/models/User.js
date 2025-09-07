@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema(
 			lowercase: true,
 			trim: true,
 		},
-		passwordHash: { type: String, required: true },
+		passwordHash: { type: String, required: true, select: false },
 		name: { type: String, required: true, trim: true },
 		avatarUrl: { type: String },
 		roles: {
@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema(
 			index: true,
 		},
 		bio: { type: String, maxlength: 280 },
-		refreshTokenHash: { type: String },
+		refreshTokenHash: { type: String, select: false },
 	},
 	{ timestamps: true }
 );
