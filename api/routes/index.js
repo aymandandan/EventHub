@@ -7,4 +7,7 @@ router.get("/health", (req, res) => {
     apiResponse.success(res, { message: "OK" });
 });
 
+// auth routes
+router.use("/auth", require("./authRoutes"));
+
 module.exports = router;
