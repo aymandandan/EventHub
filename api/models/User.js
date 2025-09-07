@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema(
 	{
@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema(
 	{ timestamps: true }
 );
 
-userSchema.index({ email: 1 }, { unique: true });
+// userSchema.index({ email: 1 }, { unique: true });
 userSchema.index({ name: "text" });
 
 userSchema.methods.verifyPassword = async function (password) {
