@@ -39,6 +39,18 @@ class ApiResponse {
   static forbidden(res, message = 'Forbidden', error = null) {
     return this.error(res, message, 403, error);
   }
+
+  static badRequest(res, message = 'Bad Request', error = null) {
+    return this.error(res, message, 400, error);
+  }
+
+  static notImplemented(res, message = 'Not Implemented', error = null) {
+    return this.error(res, message, 501, error);
+  }
+
+  static internalServerError(res, message = 'Internal Server Error', error = null) {
+    return this.error(res, message, 500, error);
+  }
 }
 
 module.exports = ApiResponse;
