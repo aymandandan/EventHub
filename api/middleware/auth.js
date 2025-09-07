@@ -1,11 +1,12 @@
 const jwt = require('jsonwebtoken');
 const ApiResponse = require('../utils/apiResponse');
 const logger = require('../utils/logger');
+const User = require('../models/User');
 
 /**
  * Middleware to verify JWT token from Authorization header
  */
-const requireAuth = (req, res, next) => {
+const requireAuth = async (req, res, next) => {
   // Get token from header
   const token = req.header('Authorization')?.replace('Bearer ', '');
 
@@ -15,8 +16,9 @@ const requireAuth = (req, res, next) => {
 
   try {
     // Verify token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    const user = await User.findById(decoded.userId);
+    req.user = user;
     next();
   } catch (err) {
     logger.error('Token verification failed:', err);
@@ -28,8 +30,8 @@ const requireAuth = (req, res, next) => {
  * Middleware to check if user has required roles
  * @param {...string} roles - List of allowed roles
  */
-const requireRole = (...roles) => {
-  return (req, res, next) => {
+const requireRole = async (...roles) => {
+  return async (req, res, next) => {
     if (!req.user) {
       return ApiResponse.unauthorized(res, 'Authentication required');
     }

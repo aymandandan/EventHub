@@ -33,8 +33,12 @@ const registerController = async (req, res) => {
 		if (existingUser) {
 			return ApiResponse.badRequest(res, "User already exists");
 		}
-
+        
 		const user = await User.create({ name, email, passwordHash: password });
+        
+        user.passwordHash = undefined;
+        user.refreshTokenHash = undefined;
+        
 		ApiResponse.success(res, user);
 	} catch (error) {
 		ApiResponse.error(res, error.message);
@@ -82,8 +86,10 @@ const loginController = async (req, res) => {
         });
 
         // save refresh token
-        user.refreshTokenHash = await User.hashPassword(refreshToken);
-        await user.save();
+        await user.saveRefreshToken(refreshToken);
+
+        user.passwordHash = undefined;
+        user.refreshTokenHash = undefined;
 
 		// return user and tokens
 		ApiResponse.success(res, { user, accessToken, refreshToken });

@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema(
 			lowercase: true,
 			trim: true,
 		},
-		passwordHash: { type: String, required: true, select: false },
+		passwordHash: { type: String, required: true },
 		name: { type: String, required: true, trim: true },
 		avatarUrl: { type: String },
 		roles: {
@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema(
 			index: true,
 		},
 		bio: { type: String, maxlength: 280 },
-		refreshTokenHash: { type: String, select: false },
+		refreshTokenHash: { type: String },
 	},
 	{ timestamps: true }
 );
@@ -41,9 +41,14 @@ userSchema.statics.hashPassword = async function (password) {
 	return bcrypt.hash(password, saltRounds);
 };
 
+userSchema.methods.saveRefreshToken = async function (refreshToken) {
+	this.refreshTokenHash = await this.constructor.hashPassword(refreshToken);
+	await this.save();
+};
+
 userSchema.pre("save", async function (next) {
 	if (this.isModified("passwordHash")) {
-		this.passwordHash = await this.constructor.hashPassword(this.password);
+		this.passwordHash = await this.constructor.hashPassword(this.passwordHash);
 	}
 	next();
 });
