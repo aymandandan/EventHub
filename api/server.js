@@ -9,15 +9,21 @@ const morgan = require("morgan");
 const port = process.env.PORT || 3001;
 const errorHandler = require("./middleware/errorHandler");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
+const helmet = require("helmet");
 
 // connect to database
 connectDB();
 
 // middleware
 app.use(cors(corsConfig));
+app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(morgan("dev"));
+// cookie parser
+app.use(cookieParser());
+// helmet
+app.use(helmet());
 
 // routes
 app.use("/api", require("./routes/index"));
