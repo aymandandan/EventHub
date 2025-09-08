@@ -10,6 +10,9 @@ router.get("/health", (req, res) => {
 // auth routes
 router.use("/auth", require("./authRoutes"));
 
+// user routes
+router.use("/users", require("./userRoutes"));
+
 // other routes outside of api (not found)
 router.use((req, res) => {
     apiResponse.notFound(res, "Invalid route");
