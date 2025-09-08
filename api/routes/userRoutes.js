@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const {
+    verifyToken,
 	requireAuth,
 	requireRole,
 	requireOwnerOrRoles,
@@ -13,11 +14,14 @@ const {
 	deleteUserController,
 } = require("../controllers/UserController");
 
+// verify token
+router.use(verifyToken);
+
 // Get all users (admin only)
 router.get("/", requireAuth, requireRole("admin"), getAllUsersController);
 
 // Get user profile (public)
-router.get("/:id", requireAuth, getUserProfileController);
+router.get("/:id", getUserProfileController);
 
 // Update user (owner or admin)
 router.put(

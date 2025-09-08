@@ -6,12 +6,12 @@ const User = require("../models/User");
 /**
  * Middleware to verify JWT token from Authorization header
  */
-const requireAuth = async (req, res, next) => {
+const verifyToken = async (req, res, next) => {
 	// Get token from header
 	const token = req.header("Authorization")?.replace("Bearer ", "");
 
 	if (!token) {
-		return ApiResponse.unauthorized(res, "No token provided");
+		next();
 	}
 
 	try {
@@ -24,6 +24,14 @@ const requireAuth = async (req, res, next) => {
 		logger.error("Token verification failed:", err);
 		return ApiResponse.unauthorized(res, "Invalid or expired token");
 	}
+};
+
+// Middleware to check if user is authenticated
+const requireAuth = async (req, res, next) => {
+	if (!req.user) {
+		return ApiResponse.unauthorized(res, "User not authenticated");
+	}
+	next();
 };
 
 /**
@@ -72,6 +80,7 @@ const requireOwnerOrRoles = (getOwnerId, ...roles) => {
 };
 
 module.exports = {
+    verifyToken,
 	requireAuth,
 	requireRole,
 	requireOwnerOrRoles,
