@@ -61,4 +61,8 @@ userSchema.pre("remove", async function (next) {
 	next();
 });
 
+userSchema.methods.isAdmin = async function () {
+	return this.roles.includes("admin");
+};
+
 module.exports = mongoose.model("User", userSchema);
