@@ -1,6 +1,5 @@
 const User = require("../models/User");
 const ApiResponse = require("../utils/apiResponse");
-const logger = require("../utils/logger");
 
 /*
 @desc Get all users
@@ -74,7 +73,6 @@ const getUserProfileController = async (req, res) => {
 
 		ApiResponse.success(res, profile, 200, "User retrieved successfully");
 	} catch (error) {
-		logger.debug("Error getting user profile:", error);
 		ApiResponse.error(res, error.message);
 	}
 };
