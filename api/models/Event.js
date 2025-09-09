@@ -60,7 +60,7 @@ eventSchema.pre("save", function (next) {
 
 // Static method for event search
 eventSchema.statics.search = function (query) {
-	const { q, tags, from, to, page = 1, limit = 10, sort = "startAt" } = query;
+	const { q, tags, from, to, page = 1, limit = 10, sort = "startAt", isPrivate } = query;
 	const skip = (page - 1) * limit;
 
 	const filter = {};
@@ -80,6 +80,10 @@ eventSchema.statics.search = function (query) {
 		filter.startAt = {};
 		if (from) filter.startAt.$gte = new Date(from);
 		if (to) filter.startAt.$lte = new Date(to);
+	}
+
+	if (isPrivate) {
+		filter.isPrivate = isPrivate;
 	}
 
 	return this.find(filter)
