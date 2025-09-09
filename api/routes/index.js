@@ -13,6 +13,9 @@ router.use("/auth", require("./authRoutes"));
 // user routes
 router.use("/users", require("./userRoutes"));
 
+// event routes
+router.use("/events", require("./eventRoutes"));
+
 // other routes outside of api (not found)
 router.use((req, res) => {
     apiResponse.notFound(res, "Invalid route");
