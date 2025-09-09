@@ -59,7 +59,6 @@ const getUserProfileController = async (req, res) => {
 
 		// if not owner or admin, remove sensitive fields
 		if (!req.user || String(profile._id) !== String(req.user._id) || !req.user.isAdmin()) {
-			profile.email = undefined;
 			profile.roles = undefined;
 		}
 		// remove timestamps if not admin
