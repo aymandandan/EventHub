@@ -14,7 +14,7 @@ const getEventOwner = async (req, res, next) => {
 };
 
 const getCommentOwner = async (req, res, next) => {
-	const comment = await Comment.findById(req.params.id);
+	const comment = await Comment.findById(req.params.commentId);
 	if (!comment) {
 		return ApiResponse.notFound(res, "Comment not found");
 	}
