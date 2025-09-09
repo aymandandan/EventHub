@@ -13,8 +13,8 @@ router.use("/auth", require("./authRoutes"));
 // user routes
 router.use("/users", require("./userRoutes"));
 
-// event routes
-router.use("/events", require("./eventRoutes"));
+// event and rsvp routes
+router.use("/events", require("./eventRoutes"), require("./rsvpRoutes"));
 
 // other routes outside of api (not found)
 router.use((req, res) => {
